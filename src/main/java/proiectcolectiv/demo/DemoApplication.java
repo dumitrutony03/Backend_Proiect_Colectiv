@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
 @ComponentScan(basePackages = {"proiectcolectiv.mapper", "proiectcolectiv.controllers", "proiectcolectiv.service"})
-//@SpringBootApplication(scanBasePackages = "proiectcolectiv.mapper")
+@SpringBootApplication(scanBasePackages = "proiectcolectiv.mapper")
 @EnableMongoRepositories
 public class DemoApplication implements CommandLineRunner {
 
