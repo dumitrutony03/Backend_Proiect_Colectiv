@@ -7,15 +7,18 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("hospitals")
-public class Hospitals {
+public class Hospitals implements Serializable {
     @Id
     @Indexed(unique = true)
-    int id;
-    String name;
+    public int id;
+    public String name;
+    public String adress;
     public float latitude;
     public float longitude;
 

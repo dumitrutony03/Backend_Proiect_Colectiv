@@ -19,4 +19,6 @@ public class DoctorsDto {
     public float rating;
     public String userName;
     public String password;
+
+
 }

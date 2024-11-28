@@ -1,6 +1,7 @@
 package proiectcolectiv.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import proiectcolectiv.dto.*;
 import proiectcolectiv.model.*;
 
@@ -11,6 +12,7 @@ public interface MyMapper {
     AppointmentsDto toDto(Appointments source);
 
     //Mapper for Doctors, DoctorsDto
+    @Mapping(target = "role", expression = "java(myToEnumDoctor())")
     Doctors toModel(DoctorsDto source);
     DoctorsDto toDto(Doctors source);
 
@@ -19,10 +21,18 @@ public interface MyMapper {
     HospitalsDto toDto(Hospitals source);
 
     //Mapper for Pacient, PacientDto
+    @Mapping(target = "role", expression = "java(myToEnumPacient())")
     Pacient toModel(PacientDto source);
+
     PacientDto toDto(Pacient source);
 
     //Mapper for Reviews, ReviewsDto
     Reviews toModel(ReviewsDto source);
     ReviewsDto toDto(Reviews source);
+    default Role myToEnumPacient() {
+        return Role.valueOf("PACIENT");
+    }
+    default Role myToEnumDoctor() {
+        return Role.valueOf("DOCTOR");
+    }
 }

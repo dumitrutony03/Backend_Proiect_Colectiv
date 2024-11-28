@@ -28,7 +28,16 @@ public class PacientController {
         Pacient savedModel = service.save(model);
         return mapper.toDto(savedModel);
     }
-
+//    @PostMapping(value = "/login")
+//    public UserDto login(@RequestBody UserDto userDto) throws UserException {
+//        User model = mapper.toModel(userDto);
+//        User loginUser = service.login(model);
+//        if (Objects.isNull(loginUser)) {
+//            throw new UserException(HttpStatus.BAD_REQUEST,
+//                    "Invalid User Name or Password", null);
+//        }
+//        return mapper.toDto(loginUser);
+//    }
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PacientDto> getAllUsers() {
         List<Pacient> users = service.findAll();
