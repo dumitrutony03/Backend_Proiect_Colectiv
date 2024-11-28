@@ -13,25 +13,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("doctors")
-public class Doctors {
-    @Id
-    @Indexed(unique = true)
-    int id;
+public class Doctors extends UserData {
     public List<Pacient> pacients;
     public List<Hospitals> hospitals;
     public String speciality;
     public float rating;
-    public String userName;
-    public String password;
 
     @Override
     public String toString() {
         return "Doctors{" +
-                "id=" + id +
+                "id=" + this.id +
                 ", pacients=" + pacients +
                 ", hospitals=" + hospitals +
                 ", speciality='" + speciality + '\'' +
                 ", rating=" + rating +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

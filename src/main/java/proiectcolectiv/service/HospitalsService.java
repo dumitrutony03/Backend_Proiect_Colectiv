@@ -1,9 +1,11 @@
 package proiectcolectiv.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import proiectcolectiv.model.Doctors;
+import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
 
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 public class HospitalsService {
     @Autowired
     MongoTemplate mt;
+    @Autowired
+    ObjectMapper objectMapper;
 
     public Hospitals save(Hospitals hospitals) {
         return mt.save(hospitals);
@@ -37,4 +41,18 @@ public class HospitalsService {
     public List<Hospitals> findAll() {
         return mt.findAll(Hospitals.class);
     }
+
+    /*
+     * Saves from given json file
+     * */
+    public void saveHospitals(String json) {
+        try {
+            HospitalRoot val = objectMapper.readValue(json, HospitalRoot.class);
+            val.getHospitals().forEach(this::save);
+
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

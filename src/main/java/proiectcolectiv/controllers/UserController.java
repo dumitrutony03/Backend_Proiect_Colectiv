@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import proiectcolectiv.dto.UserDataDto;
+import proiectcolectiv.model.Role;
+import proiectcolectiv.model.UserData;
 import proiectcolectiv.service.UserService;
-import proiectcolectiv.dto.UserDto;
 import proiectcolectiv.mapper.UserMapper;
-import proiectcolectiv.model.User;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,21 +25,21 @@ public class UserController {
     private UserMapper mapper;
 
     @PostMapping(value = "/")
-    public UserDto addUser(@RequestBody UserDto userDto) {
-        User model = mapper.toModel(userDto);
-        User savedModel = service.save(model);
+    public UserDataDto addUser(@RequestBody UserDataDto userDto) {
+        UserData model = mapper.toModel(userDto);
+        UserData savedModel = service.save(model);
         return mapper.toDto(savedModel);
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDto> getAllUsers() {
-        List<User> users = service.findAll();
+    public List<UserDataDto> getAllUsers() {
+        List<UserData> users = service.findAll();
         return users.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> getUserByName(@PathVariable String userName) {
-        User user = service.findByUserName(userName);
+    public ResponseEntity<UserDataDto> getUserByName(@PathVariable String userName) {
+        UserData user = service.findByUserName(userName);
         if (Objects.isNull(user)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -45,12 +47,17 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public UserDto login(@RequestBody UserDto userDto) throws UserException {
-        User model = mapper.toModel(userDto);
-        User loginUser = service.login(model);
+    public UserDataDto login(@RequestBody UserDataDto userDto) throws UserException {
+        UserData model = mapper.toModel(userDto);
+        UserData loginUser = null;
+        if(Role.DOCTOR.name().equals(userDto.role)){
+             loginUser = service.loginDoctor(model);
+        } else if (Role.PACIENT.name().equals(userDto.role)) {
+             loginUser = service.loginPacient(model);
+        }
+
         if (Objects.isNull(loginUser)) {
-            throw new UserException(HttpStatus.BAD_REQUEST,
-                    "Invalid User Name or Password", null);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Invalid User Name or Password");
         }
         return mapper.toDto(loginUser);
     }
