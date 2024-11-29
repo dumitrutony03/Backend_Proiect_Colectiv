@@ -19,8 +19,8 @@ public class Appointments {
     @Id
     @Indexed(unique = true)
     int id;
-    public ArrayList<Doctors> doctors;
-    public ArrayList<Pacient> pacients;
+    public String doctorUsername;
+    public String pacientUsername;
     public Date date;//Constructs a Date object initialized with the given year, month, and day.
     public Time time;//Constructs a Time object initialized with the given values for the hour, minute, and second. The driver sets the date components to January 1, 1970. Any method that attempts to access the date components of a Time object will throw a java.lang.IllegalArgumentException.
     public String diagnosis;
@@ -29,8 +29,8 @@ public class Appointments {
     public String toString() {
         return "Appointments{" +
                 "id=" + id +
-                ", doctors=" + doctors +
-                ", pacients=" + pacients +
+                ", doctorUsername='" + doctorUsername + '\'' +
+                ", pacientUsername='" + pacientUsername + '\'' +
                 ", date=" + date +
                 ", time=" + time +
                 ", diagnosis='" + diagnosis + '\'' +

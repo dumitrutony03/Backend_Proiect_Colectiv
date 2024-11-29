@@ -12,7 +12,10 @@ import java.util.List;
 public class AppointmentsService {
     @Autowired
     MongoTemplate mt;
-
+    @Autowired
+    PacientService pacientService;
+    @Autowired
+    DoctorsService doctorsService;
     public Appointments save(Appointments appointments) {
         return mt.save(appointments);
     }
