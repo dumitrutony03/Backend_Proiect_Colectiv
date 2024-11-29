@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class Hospitals implements Serializable {
     public String adress;
     public float latitude;
     public float longitude;
-
+    public List<Reviews> reviews;
     @Override
     public String toString() {
         return "Hospitals{" +

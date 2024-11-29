@@ -3,6 +3,9 @@ package proiectcolectiv.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import proiectcolectiv.model.Reviews;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,4 +16,6 @@ public class HospitalsDto {
     public String adress;
     public float latitude;
     public float longitude;
+    public List<ReviewsDto> reviews;
+
 }
