@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import proiectcolectiv.dto.ReviewsDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,4 +34,5 @@ public class Hospitals implements Serializable {
                 ", longitude=" + longitude +
                 '}';
     }
+
 }

@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
+import org.springframework.data.mongodb.core.query.Query;
+
 
 import java.util.List;
 
@@ -21,7 +25,13 @@ public class HospitalsService {
         return mt.save(hospitals);
     }
 
-    public int getLasId() {
+    public Hospitals findByName(String name) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is(name));
+        return mt.findOne(query, Hospitals.class);
+    }
+
+    public int getLastId() {
         // return last ID
         int lastID;
         List<Hospitals> list = findAll();
@@ -42,6 +52,23 @@ public class HospitalsService {
         return mt.findAll(Hospitals.class);
     }
 
+    public void deleteByName(String name) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is(name));
+        mt.remove(query, Hospitals.class);
+    }
+
+    public Hospitals updateByName(String name, String newAddress, List<Double> newCoordinates) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is(name));
+
+        Update update = new Update();
+        update.set("address", newAddress);
+        update.set("coordinates", newCoordinates);
+
+        return mt.findAndModify(query, update, Hospitals.class);
+    }
+
     /*
      * Saves from given json file
      * */
@@ -53,6 +80,24 @@ public class HospitalsService {
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public Hospitals update(Hospitals hospital) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is(hospital.getName()));
+
+        Update update = new Update();
+        update.set("address", hospital.getAdress());
+        update.set("name", hospital.getName());
+        update.set("latitude", hospital.getName());
+        update.set("longitude", hospital.getName());
+        update.set("reviews", hospital.getReviews());
+
+        return mt.findAndModify(query, update, Hospitals.class);
+    }
+
+    public void delete(Hospitals hospital) {
+        mt.remove(hospital);
     }
 
 }
