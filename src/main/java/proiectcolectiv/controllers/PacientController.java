@@ -1,10 +1,14 @@
 package proiectcolectiv.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.PacientDto;
+import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.mapper.MyMapper;
+import proiectcolectiv.mapper.UserMapper;
 import proiectcolectiv.model.Pacient;
 import proiectcolectiv.service.PacientService;
 
@@ -19,25 +23,21 @@ public class PacientController {
     private PacientService service;
     @Autowired
     private MyMapper mapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping(value = "/")
-    public PacientDto addPacient(@RequestBody PacientDto pacientDto) {
-        System.out.println("a intrat in addPacient");
-        Pacient model = mapper.toModel(pacientDto);
-        model.setId(service.getLasId()+1);
-        Pacient savedModel = service.save(model);
-        return mapper.toDto(savedModel);
+    public PacientDto addPacient(@RequestBody UserDataDto pacientDto) {
+        if (!service.checkPacientExists(pacientDto)) {
+            Pacient pacient = userMapper.toModelPacient(pacientDto);
+            pacient.setId(service.getLasId() + 1);
+            Pacient savedModel = service.save(pacient);
+            return mapper.toDto(savedModel);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
+        }
     }
-//    @PostMapping(value = "/login")
-//    public UserDto login(@RequestBody UserDto userDto) throws UserException {
-//        User model = mapper.toModel(userDto);
-//        User loginUser = service.login(model);
-//        if (Objects.isNull(loginUser)) {
-//            throw new UserException(HttpStatus.BAD_REQUEST,
-//                    "Invalid User Name or Password", null);
-//        }
-//        return mapper.toDto(loginUser);
-//    }
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PacientDto> getAllUsers() {
         List<Pacient> users = service.findAll();

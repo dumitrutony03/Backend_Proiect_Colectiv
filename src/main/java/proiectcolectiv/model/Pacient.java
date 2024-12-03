@@ -3,16 +3,10 @@ package proiectcolectiv.model;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @Document("pacient")
 public class Pacient extends UserData{
-
-    @Override
-    public String toString() {
-        return "Pacient{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+    public List<String> diagnostics;
 }

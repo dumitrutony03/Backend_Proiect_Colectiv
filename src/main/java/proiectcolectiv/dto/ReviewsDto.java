@@ -11,5 +11,4 @@ public class ReviewsDto {
     public int id;
     public String review_text;
     public float rating;
-    //comentariu Test
 }
