@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.model.Doctors;
 
 import java.util.List;
@@ -43,11 +44,12 @@ public class DoctorsService {
     }
 
     //exists->return true, not exists->return false
-    public boolean checkDoctorExists(Doctors model) {
-        if (findByUserName(model.userName) == null) {
+    public boolean checkDoctorExists(UserDataDto model) {
+        Doctors doctor = findByUserName(model.userName);
+        if ( doctor== null) {
             return false;
         }
-        String name = findByUserName(model.userName).getUserName();
+        String name = doctor.getUserName();
         boolean val = name.isEmpty();
         if (!val) {
             return true;

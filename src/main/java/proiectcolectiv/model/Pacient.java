@@ -9,5 +9,4 @@ import java.util.List;
 @Document("pacient")
 public class Pacient extends UserData{
     public List<String> diagnostics;
-
 }

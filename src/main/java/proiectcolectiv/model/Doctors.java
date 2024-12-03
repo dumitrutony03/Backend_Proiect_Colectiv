@@ -15,15 +15,4 @@ public class Doctors extends UserData {
     public List<Hospitals> hospitals;
     public String speciality;
     public List<Reviews> reviews;
-    @Override
-    public String toString() {
-        return "Doctors{" +
-                "id=" + this.id +
-                ", hospitals=" + hospitals +
-                ", speciality='" + speciality + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", reviews='" + reviews + '\'' +
-                '}';
-    }
 }

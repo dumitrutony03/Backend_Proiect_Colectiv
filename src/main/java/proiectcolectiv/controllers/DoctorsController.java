@@ -3,20 +3,20 @@ package proiectcolectiv.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.DoctorsDto;
+import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.mapper.MyMapper;
+import proiectcolectiv.mapper.UserMapper;
 import proiectcolectiv.model.Doctors;
-import proiectcolectiv.model.Hospitals;
 import proiectcolectiv.service.DoctorsService;
-import proiectcolectiv.service.HospitalsService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/doctors")
+@RequestMapping("/doctor")
 public class DoctorsController {
 
     @Autowired
@@ -24,21 +24,20 @@ public class DoctorsController {
 
     @Autowired
     private MyMapper mapper;
-
+    @Autowired
+    private UserMapper userMapper;
     @PostMapping(value = "/")
-    public DoctorsDto addDoctors(@RequestBody DoctorsDto doctorsDto) {
+    public UserDataDto addDoctors(@RequestBody UserDataDto doctorsDto) {
         //Cand inregistram un doctor, o sa ii dam doar username si parola.
         // Pacientii si review urile le facem cu update.
-
-        System.out.println("a intrat in addDoctors");
-        Doctors model = mapper.toModel(doctorsDto);
-        if(!service.checkDoctorExists(model)){
-            model.setId(service.getLasId()+1);
-            Doctors savedModel = service.save(model);
-            return mapper.toDto(savedModel);
+        if(!service.checkDoctorExists(doctorsDto)){
+            Doctors doctor = userMapper.toModelDoctors(doctorsDto);
+            doctor.setId(service.getLasId() + 1);
+            Doctors savedModel = service.save(doctor);
+            return userMapper.toDto(savedModel);
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
         }
-        DoctorsDto dto = new DoctorsDto();
-        return new ResponseEntity<>(dto, HttpStatus.ALREADY_REPORTED).getBody();
      }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
