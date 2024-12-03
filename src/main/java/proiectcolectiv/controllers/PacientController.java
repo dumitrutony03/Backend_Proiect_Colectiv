@@ -1,7 +1,9 @@
 package proiectcolectiv.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import proiectcolectiv.dto.PacientDto;
 import proiectcolectiv.mapper.MyMapper;
@@ -24,20 +26,15 @@ public class PacientController {
     public PacientDto addPacient(@RequestBody PacientDto pacientDto) {
         System.out.println("a intrat in addPacient");
         Pacient model = mapper.toModel(pacientDto);
-        model.setId(service.getLasId()+1);
-        Pacient savedModel = service.save(model);
-        return mapper.toDto(savedModel);
+        if (!service.checkPacientExists(model)) {
+            model.setId(service.getLasId() + 1);
+            Pacient savedModel = service.save(model);
+            return mapper.toDto(savedModel);
+        }
+        PacientDto dto = new PacientDto();
+        return new ResponseEntity<>(dto, HttpStatus.ALREADY_REPORTED).getBody();
     }
-//    @PostMapping(value = "/login")
-//    public UserDto login(@RequestBody UserDto userDto) throws UserException {
-//        User model = mapper.toModel(userDto);
-//        User loginUser = service.login(model);
-//        if (Objects.isNull(loginUser)) {
-//            throw new UserException(HttpStatus.BAD_REQUEST,
-//                    "Invalid User Name or Password", null);
-//        }
-//        return mapper.toDto(loginUser);
-//    }
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PacientDto> getAllUsers() {
         List<Pacient> users = service.findAll();

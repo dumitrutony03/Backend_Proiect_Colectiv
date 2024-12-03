@@ -2,8 +2,10 @@ package proiectcolectiv.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import proiectcolectiv.model.Pacient;
+ import proiectcolectiv.model.Pacient;
 
 import java.util.List;
 
@@ -28,12 +30,24 @@ public class PacientService {
         System.out.println("Last id is: " + lastID);
         return lastID;
     }
-//    public Pacient findByUserName(String userName) {
-//        Query query = new Query();
-//        query.addCriteria(Criteria.where("userName").is(userName));
-//        return mt.findOne(query, User.class);
-//    }
+    public Pacient findByUserName(String userName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userName").is(userName));
+        return mt.findOne(query, Pacient.class);
+    }
     public List<Pacient> findAll() {
         return mt.findAll(Pacient.class);
+    }
+
+    public boolean checkPacientExists(Pacient model) {
+        if(findByUserName(model.userName) == null){
+            return false;
+        }
+        String name = findByUserName(model.userName).getUserName();
+        boolean val =  name.isEmpty() ;
+        if(!val){
+            return true;
+        }
+        return true;
     }
 }
