@@ -21,24 +21,24 @@ public class DoctorsController {
 
     @Autowired
     private DoctorsService service;
-
     @Autowired
     private MyMapper mapper;
     @Autowired
     private UserMapper userMapper;
+
     @PostMapping(value = "/")
     public UserDataDto addDoctors(@RequestBody UserDataDto doctorsDto) {
         //Cand inregistram un doctor, o sa ii dam doar username si parola.
         // Pacientii si review urile le facem cu update.
-        if(!service.checkDoctorExists(doctorsDto)){
+        if (!service.checkDoctorExists(doctorsDto)) {
             Doctors doctor = userMapper.toModelDoctors(doctorsDto);
-            doctor.setId(service.getLasId() + 1);
+            doctor.setId(service.getLastId() + 1);
             Doctors savedModel = service.save(doctor);
             return userMapper.toDto(savedModel);
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
         }
-     }
+    }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DoctorsDto> getAllDoctors() {

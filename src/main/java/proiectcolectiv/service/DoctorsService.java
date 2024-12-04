@@ -19,7 +19,7 @@ public class DoctorsService {
         return mt.save(doctors);
     }
 
-    public int getLasId() {
+    public int getLastId() {
         int lastID;
         List<Doctors> list = findAll();
         int size = list.size();
