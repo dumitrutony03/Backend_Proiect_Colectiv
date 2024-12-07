@@ -27,7 +27,7 @@ public class DoctorsService {
         doctor.removeHospital(hospitalName);
         return mt.save(doctor);
     }
-    public int getLasId() {
+    public int getLastId() {
         int lastID;
         List<Doctors> list = findAll();
         int size = list.size();

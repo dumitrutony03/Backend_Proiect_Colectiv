@@ -22,7 +22,6 @@ public class DoctorsController {
 
     @Autowired
     private DoctorsService service;
-
     @Autowired
     private MyMapper mapper;
     @Autowired
@@ -38,7 +37,7 @@ public class DoctorsController {
     public UserDataDto addDoctors(@RequestBody UserDataDto doctorsDto) {
         if (!service.checkDoctorExists(doctorsDto.userName)) {
             Doctors doctor = userMapper.toModelDoctors(doctorsDto);
-            doctor.setId(service.getLasId() + 1);
+            doctor.setId(service.getLastId() + 1);
             Doctors savedModel = service.save(doctor);
             return userMapper.toDto(savedModel);
         } else {
