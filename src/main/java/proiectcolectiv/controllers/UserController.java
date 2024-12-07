@@ -12,9 +12,7 @@ import proiectcolectiv.model.UserData;
 import proiectcolectiv.service.UserService;
 import proiectcolectiv.mapper.UserMapper;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -24,9 +22,15 @@ public class UserController {
     @Autowired
     private UserMapper mapper;
 
-
+    /**
+     * User login with given role
+     *
+     * @param userDto
+     * @param role
+     * @return UserDataDto
+     */
     @PostMapping(value = "/login")
-    public UserDataDto login(@RequestBody UserDataDto userDto, @RequestParam String role) throws UserException {
+    public UserDataDto login(@RequestBody UserDataDto userDto, @RequestParam String role) {
         UserData model = mapper.toModel(userDto);
         UserData loginUser = null;
         if (Role.DOCTOR.name().equals(role)) {
@@ -35,7 +39,7 @@ public class UserController {
             loginUser = service.loginPacient(model);
         }
         if (Objects.isNull(loginUser)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid User Name or Password");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User Name or Password");
         }
         return mapper.toDto(loginUser);
     }

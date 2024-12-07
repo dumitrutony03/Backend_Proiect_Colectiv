@@ -28,6 +28,12 @@ public class AppointmentsController {
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
+    /**
+     * Add appointment wich involves an existing pacient and an existing doctor
+     *
+     * @param appointmentsDto
+     * @return AppointmentsDto
+     */
     @PostMapping(value = "/")
     public AppointmentsDto addAppointment(@RequestBody AppointmentsDto appointmentsDto) {
         if (appointmentsService.check(appointmentsDto.getDoctorUsername(), appointmentsDto.getPacientUsername())) {
@@ -61,12 +67,26 @@ public class AppointmentsController {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid pacient or doctor");
     }
 
+    /**
+     * Find all appointments
+     *
+     * @return List<AppointmentsDto>
+     */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AppointmentsDto> getAllAppointment() {
         List<Appointments> appointments = appointmentsService.findAll();
         return appointments.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
     }
 
+    /**
+     * Filter appointments by doctor, startDate, endDate of appointments
+     *
+     * @param model
+     * @param doctor
+     * @param startDate
+     * @param endDate
+     * @return List<AppointmentsDto>
+     */
     @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AppointmentsDto> filterAppointmentsByDoctor(Model model,
                                                             @RequestParam String doctor,
@@ -102,6 +122,12 @@ public class AppointmentsController {
         }
     }
 
+    /**
+     * Check given date is a date format
+     *
+     * @param date
+     * @return String
+     */
     private String checkDate(String date) {
         if (date != null) {
             LocalDate begin = LocalDate.parse(date, dateFormatter);
@@ -110,6 +136,12 @@ public class AppointmentsController {
         return null;
     }
 
+    /**
+     * Check given time is a time format
+     *
+     * @param time
+     * @return String
+     */
     private String checkTime(String time) {
         if (time != null) {
             LocalTime myTime = LocalTime.parse(time, timeFormatter);

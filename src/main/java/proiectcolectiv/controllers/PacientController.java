@@ -26,6 +26,12 @@ public class PacientController {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * Register pacient
+     *
+     * @param pacientDto
+     * @return PacientDto
+     */
     @PostMapping(value = "/")
     public PacientDto addPacient(@RequestBody UserDataDto pacientDto) {
         if (!service.checkPacientExists(pacientDto)) {
@@ -38,6 +44,11 @@ public class PacientController {
         }
     }
 
+    /**
+     * Find all pacients
+     *
+     * @return List<PacientDto>
+     */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PacientDto> getAllUsers() {
         List<Pacient> users = service.findAll();
