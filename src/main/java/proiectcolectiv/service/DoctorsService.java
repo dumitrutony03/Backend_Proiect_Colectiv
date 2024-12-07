@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.model.Doctors;
 
 import java.util.List;
@@ -18,7 +17,16 @@ public class DoctorsService {
     public Doctors save(Doctors doctors) {
         return mt.save(doctors);
     }
-
+    public Doctors addHospitalNameToDoctor(String doctorsName, String hospitalName){
+        Doctors doctor = findByUserName(doctorsName);
+        doctor.addHosptial(hospitalName);
+        return mt.save(doctor);
+    }
+    public Doctors removeHospitalNameToDoctor(String doctorsName, String hospitalName){
+        Doctors doctor = findByUserName(doctorsName);
+        doctor.removeHospital(hospitalName);
+        return mt.save(doctor);
+    }
     public int getLastId() {
         int lastID;
         List<Doctors> list = findAll();
@@ -44,8 +52,8 @@ public class DoctorsService {
     }
 
     //exists->return true, not exists->return false
-    public boolean checkDoctorExists(UserDataDto model) {
-        Doctors doctor = findByUserName(model.userName);
+    public boolean checkDoctorExists(String userName) {
+        Doctors doctor = findByUserName( userName);
         if ( doctor== null) {
             return false;
         }
