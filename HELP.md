@@ -62,3 +62,32 @@ POST http://localhost:8080/user/login?role=PACIENT
 "userName":"Cristi",
 "password":"aaa"
 }
+
+
+---------------------------*HOSPITAL*----------------------------------------
+
+1. GET http://localhost:8080/hospitals/all
+
+
+1. POST http://localhost:8080/hospitals/
+{
+   "name": "Spitalul Clinic Județean de Urgență Cluj-Napoca",
+   "adress": "Strada Clinicilor, nr. 3-5",
+   "latitude": 46.7659412,
+   "longitude": 23.5831731,
+   "reviews": [
+   {
+   "rating": 4.5,
+   "review_text": "asddjh"
+   }
+   ]
+}
+2. DELETE http://localhost:8080/hospitals/delete/Spitalul Clinic Județean de Urgență Cluj-Napoca
+
+3. GET http://localhost:8080/hospitals/Spitalul Clinic Județean de Urgență Cluj-Napoca
+
+4. PATCH http://localhost:8080/hospitals/update/Spitalul Clinic Județean de Urgență Cluj-Napoca
+
+{
+   "adress": "adresa noua din update"
+}
