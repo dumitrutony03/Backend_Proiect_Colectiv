@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import proiectcolectiv.dto.*;
 import proiectcolectiv.model.*;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface MyMapper {
     //Mapper for Appointments, AppointmentsDto
@@ -21,6 +23,9 @@ public interface MyMapper {
 
     //Mapper for Pacient, PacientDto
     Pacient toModel(PacientDto source);
+
+    List<Reviews> toModelList(List<ReviewsDto> source);
+    List<ReviewsDto> toDtoList(List<Reviews> source);
 
     PacientDto toDto(Pacient source);
 
