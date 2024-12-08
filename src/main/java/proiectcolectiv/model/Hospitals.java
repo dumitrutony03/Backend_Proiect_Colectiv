@@ -25,4 +25,14 @@ public class Hospitals implements Serializable {
     public float latitude;
     public float longitude;
     public List<Reviews> reviews;
+    @Override
+    public String toString() {
+        return "Hospitals{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
+
 }
