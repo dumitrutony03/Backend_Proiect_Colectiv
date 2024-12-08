@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/hospitals")
 public class HospitalsController {
-
     @Autowired
     private HospitalsService service;
     @Autowired
