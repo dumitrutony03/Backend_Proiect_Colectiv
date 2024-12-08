@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import proiectcolectiv.model.Doctors;
 import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
 import org.springframework.data.mongodb.core.query.Query;
@@ -100,4 +101,17 @@ public class HospitalsService {
         mt.remove(hospital);
     }
 
+    public boolean checkHospitalExists(String name) {
+        Hospitals hospital = findByName( name);
+        if ( hospital== null) {
+            return false;
+        }
+
+        String namec = hospital.getName();
+        boolean val = namec.isEmpty();
+        if (!val) {
+            return true;
+        }
+        return true;
+    }
 }

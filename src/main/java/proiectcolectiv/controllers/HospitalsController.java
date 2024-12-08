@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.HospitalsDto;
 import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
@@ -30,9 +31,14 @@ public class HospitalsController {
     @PostMapping(value = "/")
     public HospitalsDto addHospital(@RequestBody HospitalsDto hospitalDTO) {
         // When registering a hospital, we will pass its name, address, coordinates, etc.
-        Hospitals model = mapper.toModel(hospitalDTO);
-        Hospitals savedModel = service.save(model);
-        return mapper.toDto(savedModel);
+        if (!service.checkHospitalExists(hospitalDTO.name)) {
+            Hospitals model = mapper.toModel(hospitalDTO);
+            model.setId(service.getLastId() + 1);
+            Hospitals savedModel = service.save(model);
+            return mapper.toDto(savedModel);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
+        }
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
