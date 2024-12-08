@@ -17,5 +17,4 @@ public class HospitalsDto {
     public float latitude;
     public float longitude;
     public List<ReviewsDto> reviews;
-
 }
