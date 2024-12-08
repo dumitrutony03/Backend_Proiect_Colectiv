@@ -13,5 +13,4 @@ import java.util.ArrayList;
 public class HospitalRoot implements Serializable {
     //clasa ce salveaza spitalele din json
     public ArrayList<Hospitals> hospitals;
-
 }

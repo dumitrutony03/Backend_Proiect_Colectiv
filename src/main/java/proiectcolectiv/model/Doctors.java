@@ -3,10 +3,9 @@ package proiectcolectiv.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,21 +13,21 @@ import java.util.List;
 @NoArgsConstructor
 @Document("doctors")
 public class Doctors extends UserData {
-    public List<Pacient> pacients;
-    public List<Hospitals> hospitals;
+    public List<String> hospitals;
     public String speciality;
-    public float rating;
+    public List<Reviews> reviews;
 
-    @Override
-    public String toString() {
-        return "Doctors{" +
-                "id=" + this.id +
-                ", pacients=" + pacients +
-                ", hospitals=" + hospitals +
-                ", speciality='" + speciality + '\'' +
-                ", rating=" + rating +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public void addHosptial(String hospitalName) {
+        if (hospitals == null) {
+            hospitals = new ArrayList<>();
+        }
+        this.hospitals.add(hospitalName);
+    }
+
+    public void removeHospital(String hospitalName) {
+        if (hospitals == null) {
+            hospitals = new ArrayList<>();
+        }
+        this.hospitals.remove(hospitalName);
     }
 }

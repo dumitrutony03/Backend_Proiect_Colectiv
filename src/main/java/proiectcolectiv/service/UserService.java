@@ -42,7 +42,7 @@ public class UserService {
     public UserData loginPacient(UserData model) {
         try{
             Query query = getQuery(model);
-            return mt.findOne(query, Doctors.class);
+            return mt.findOne(query, Pacient.class);
         }catch (Exception e ){
             return null;
         }

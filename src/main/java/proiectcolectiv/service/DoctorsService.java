@@ -5,32 +5,38 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import proiectcolectiv.model.Appointments;
 import proiectcolectiv.model.Doctors;
-import proiectcolectiv.model.Pacient;
-
 
 import java.util.List;
 
 @Service
-public class DoctorsService {@Autowired
-MongoTemplate mt;
+public class DoctorsService {
+    @Autowired
+    MongoTemplate mt;
+
     public Doctors save(Doctors doctors) {
         return mt.save(doctors);
     }
-
-    public int getLasId() {
+    public Doctors addHospitalNameToDoctor(String doctorsName, String hospitalName){
+        Doctors doctor = findByUserName(doctorsName);
+        doctor.addHosptial(hospitalName);
+        return mt.save(doctor);
+    }
+    public Doctors removeHospitalNameToDoctor(String doctorsName, String hospitalName){
+        Doctors doctor = findByUserName(doctorsName);
+        doctor.removeHospital(hospitalName);
+        return mt.save(doctor);
+    }
+    public int getLastId() {
         int lastID;
         List<Doctors> list = findAll();
         int size = list.size();
         System.out.println("size is: " + size);
-
         if (size == 0) {
             lastID = 0;
         } else {
-            lastID = list.stream().toList().get(size-1).getId();
+            lastID = list.stream().toList().get(size - 1).getId();
         }
-//        lastID = list.stream().toList().get(size ).getId();
         System.out.println("Last id is: " + lastID);
         return lastID;
     }
@@ -40,7 +46,22 @@ MongoTemplate mt;
         query.addCriteria(Criteria.where("userName").is(userName));
         return mt.findOne(query, Doctors.class);
     }
+
     public List<Doctors> findAll() {
         return mt.findAll(Doctors.class);
+    }
+
+    //exists->return true, not exists->return false
+    public boolean checkDoctorExists(String userName) {
+        Doctors doctor = findByUserName( userName);
+        if ( doctor== null) {
+            return false;
+        }
+        String name = doctor.getUserName();
+        boolean val = name.isEmpty();
+        if (!val) {
+            return true;
+        }
+        return true;
     }
 }
