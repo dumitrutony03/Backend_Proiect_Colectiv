@@ -42,7 +42,7 @@ public class HospitalsService {
         if (size == 0) {
             lastID = 0;
         } else {
-            lastID = list.stream().toList().get(size).getId();
+            lastID = list.stream().toList().get(size - 1).getId();
         }
 
         System.out.println("Last id is: " + lastID);
