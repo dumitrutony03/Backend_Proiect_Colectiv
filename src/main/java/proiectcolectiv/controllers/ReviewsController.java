@@ -30,9 +30,6 @@ public class ReviewsController {
      */
     @PostMapping(value = "/")
     public ResponseEntity<ReviewsDto> addReviews(@RequestBody ReviewsDto reviewsDto) {
-//        if (service.findReviewById(reviewsDto.getId()).isPresent()) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review with this ID already exists.");
-//        }
 
         Reviews reviews = mapper.toModel(reviewsDto);
         reviews.setId(service.getLastId() + 1);
