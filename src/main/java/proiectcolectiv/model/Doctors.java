@@ -30,5 +30,5 @@ public class Doctors extends UserData {
         }
         this.hospitals.remove(hospitalName);
     }
-    //exemplu git push pull
+
 }
