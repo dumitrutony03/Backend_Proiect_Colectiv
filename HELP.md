@@ -82,11 +82,11 @@ POST http://localhost:8080/user/login?role=PACIENT
    }
    ]
 }
-2. DELETE http://localhost:8080/hospitals/delete/Spitalul Clinic Județean de Urgență Cluj-Napoca
+2. DELETE http://localhost:8080/hospitals/delete/Spitalul-Clinic-Județea-de-Urgență-Cluj-Napoca
 
-3. GET http://localhost:8080/hospitals/Spitalul Clinic Județean de Urgență Cluj-Napoca
+3. GET http://localhost:8080/hospitals/Spitalul-Clinic-Județean-de-Urgență-Cluj-Napoca
 
-4. PATCH http://localhost:8080/hospitals/update/Spitalul Clinic Județean de Urgență Cluj-Napoca
+4. PATCH http://localhost:8080/hospitals/update/Spitalul-Clinic-Județean-de-Urgență-Cluj-Napoca
 
 {
    "adress": "adresa noua din update"
