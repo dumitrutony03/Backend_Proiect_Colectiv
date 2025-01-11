@@ -91,3 +91,17 @@ POST http://localhost:8080/user/login?role=PACIENT
 {
    "adress": "adresa noua din update"
 }
+
+---------------------------*REVIEW*----------------------------------------
+1. GET http://localhost:8080/review/all
+2. POST http://localhost:8080/review/
+   {
+   "review_text": "The hospital provides excellent care.",
+   "rating": 4.8
+   }
+3. DELETE http://localhost:8080/review/delete/{id}
+4. PATCH http://localhost:8080/review/update/{id}
+   {
+   "review_text": "Updated review text.",
+   "rating": 4.9
+   }
