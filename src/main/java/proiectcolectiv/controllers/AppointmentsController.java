@@ -3,6 +3,7 @@ package proiectcolectiv.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,6 +35,7 @@ public class AppointmentsController {
      * @param appointmentsDto
      * @return AppointmentsDto
      */
+    @PreAuthorize("hasRole('DOCTOR')") // Only doctors can add appointments
     @PostMapping(value = "/")
     public AppointmentsDto addAppointment(@RequestBody AppointmentsDto appointmentsDto) {
         if (appointmentsService.check(appointmentsDto.getDoctorUsername(), appointmentsDto.getPacientUsername())) {
@@ -72,6 +74,7 @@ public class AppointmentsController {
      *
      * @return List<AppointmentsDto>
      */
+    @PreAuthorize("hasRole('DOCTOR') or hasRole('PACIENT')") // Both doctors and patients can view appointments
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AppointmentsDto> getAllAppointment() {
         List<Appointments> appointments = appointmentsService.findAll();

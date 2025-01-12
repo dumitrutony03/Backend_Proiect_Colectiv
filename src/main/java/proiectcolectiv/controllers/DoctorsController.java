@@ -3,6 +3,7 @@ package proiectcolectiv.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.AddHospitalDto;
@@ -33,6 +34,7 @@ public class DoctorsController {
      * @param doctorsDto
      * @return UserDataDto
      */
+    @PreAuthorize("hasRole('DOCTOR')") // Only doctors can register doctors
     @PostMapping(value = "/")
     public UserDataDto addDoctors(@RequestBody UserDataDto doctorsDto) {
         if (!service.checkDoctorExists(doctorsDto.userName)) {
@@ -50,6 +52,7 @@ public class DoctorsController {
      *
      * @return List<DoctorsDto>
      */
+    @PreAuthorize("hasRole('DOCTOR') or hasRole('PACIENT')") //both doctors and patients can see the doctors
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DoctorsDto> getAllDoctors() {
         List<Doctors> users = service.findAll();

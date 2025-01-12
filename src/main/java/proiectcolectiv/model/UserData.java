@@ -17,4 +17,5 @@ public class UserData {
     @Indexed(unique = true)
     public String userName;
     public String password;
+    public String role;
 }
