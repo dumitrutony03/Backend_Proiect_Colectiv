@@ -30,8 +30,9 @@ public class HospitalsController {
 
     @PostMapping(value = "/")
     public HospitalsDto addHospital(@RequestBody HospitalsDto hospitalDTO) {
-        // When registering a hospital, we will pass its name, address, coordinates, etc.
-        if (!service.checkHospitalExists(hospitalDTO.name)) {
+        // Replace hyphens with spaces in the hospital name
+        hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
+        if (!service.checkHospitalExists(hospitalDTO.getName())) {
             Hospitals model = mapper.toModel(hospitalDTO);
             model.setId(service.getLastId() + 1);
             Hospitals savedModel = service.save(model);
@@ -40,7 +41,6 @@ public class HospitalsController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
         }
     }
-
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HospitalsDto> getAllHospitals() {
         List<Hospitals> hospitals = service.findAll();
@@ -49,6 +49,8 @@ public class HospitalsController {
 
     @GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HospitalsDto> getHospitalByName(@PathVariable String name) {
+        // Replace hyphens with spaces in the hospital name
+        name = name.replace("-", " ");
         Hospitals hospital = service.findByName(name);
         if (Objects.isNull(hospital)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,14 +60,14 @@ public class HospitalsController {
 
     @PatchMapping(value = "/update/{name}")
     public ResponseEntity<HospitalsDto> partialUpdateHospital(@PathVariable String name, @RequestBody HospitalsDto hospitalsDto) {
-        // Find the existing hospital by name
+        // Replace hyphens with spaces in the hospital name
+        name = name.replace("-", " ");
         Hospitals existingHospital = service.findByName(name);
 
         if (existingHospital == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Update only the fields that are provided in the request
         if (hospitalsDto.getAdress() != null) {
             existingHospital.setAdress(hospitalsDto.getAdress());
         }
@@ -79,28 +81,20 @@ public class HospitalsController {
             existingHospital.setReviews(mapper.toModelList(hospitalsDto.getReviews()));
         }
 
-        // Save the updated hospital
         Hospitals updatedHospital = service.save(existingHospital);
-
-        // Return the updated hospital
         return new ResponseEntity<>(mapper.toDto(updatedHospital), HttpStatus.OK);
     }
-
-
     @DeleteMapping(value = "/delete/{name}")
     public ResponseEntity<Void> deleteHospital(@PathVariable String name) {
-        // First, find the hospital by name
+        // Replace hyphens with spaces in the hospital name
+        name = name.replace("-", " ");
         Hospitals hospital = service.findByName(name);
 
         if (hospital == null) {
-            // If the hospital doesn't exist, return a NOT FOUND response
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Delete the hospital
         service.delete(hospital);
-
-        // Return a NO CONTENT response (successful deletion)
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
