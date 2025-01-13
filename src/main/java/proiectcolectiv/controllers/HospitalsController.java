@@ -31,7 +31,7 @@ public class HospitalsController {
     @PostMapping(value = "/")
     public HospitalsDto addHospital(@RequestBody HospitalsDto hospitalDTO) {
         // Replace hyphens with spaces in the hospital name
-        hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
+       hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
         if (!service.checkHospitalExists(hospitalDTO.getName())) {
             Hospitals model = mapper.toModel(hospitalDTO);
             model.setId(service.getLastId() + 1);

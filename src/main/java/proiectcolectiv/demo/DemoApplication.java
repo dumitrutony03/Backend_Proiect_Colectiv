@@ -19,8 +19,6 @@ public class DemoApplication implements CommandLineRunner {
     static HospitalsService hospitalsService;
 
     public static void main(String[] args) {
-
-
         SpringApplication.run(DemoApplication.class, args);
 
     }

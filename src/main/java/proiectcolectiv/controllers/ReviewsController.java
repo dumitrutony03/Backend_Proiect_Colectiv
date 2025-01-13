@@ -24,7 +24,6 @@ public class ReviewsController {
     private ReviewsService service;
 
     @Autowired
-    @Qualifier("myMapper")
     private MyMapper mapper;
 
     /**
@@ -32,7 +31,6 @@ public class ReviewsController {
      */
     @PostMapping(value = "/")
     public ResponseEntity<ReviewsDto> addReviews(@RequestBody ReviewsDto reviewsDto) {
-
         Reviews reviews = mapper.toModel(reviewsDto);
         reviews.setId(service.getLastId() + 1);
         Reviews savedModel = service.saveReview(reviews);
