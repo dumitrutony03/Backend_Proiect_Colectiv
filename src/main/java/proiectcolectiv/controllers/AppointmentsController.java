@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentsController {
-//    "Am fost aicisha"
+//    "Am fost aicis"
 
     @Autowired
     AppointmentsService appointmentsService;
