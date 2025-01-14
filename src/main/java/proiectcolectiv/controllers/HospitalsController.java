@@ -9,9 +9,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import proiectcolectiv.dto.AddReviewDto;
+import proiectcolectiv.dto.DoctorsDto;
 import proiectcolectiv.dto.HospitalsDto;
 import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
+import proiectcolectiv.model.Doctors;
 import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.HospitalsService;
 import proiectcolectiv.model.Hospitals;
@@ -97,4 +100,21 @@ public class HospitalsController {
         service.delete(hospital);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    /**
+     * Add review to a hospital
+     *
+     * @param addReviewDto
+     * @return HospitalsDto
+     */
+    @PostMapping(value = "/review/add")
+    public HospitalsDto addReview(@RequestBody AddReviewDto addReviewDto) {
+        if (service.checkHospitalExists(addReviewDto.getName())) {
+            Hospitals model = service.addReviewToHospital(addReviewDto.getName(), addReviewDto.getReview_text(), addReviewDto.getRating());
+            return mapper.toDto(model);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
+    }
+
 }

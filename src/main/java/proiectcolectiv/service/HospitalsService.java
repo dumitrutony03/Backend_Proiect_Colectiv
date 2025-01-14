@@ -11,6 +11,7 @@ import proiectcolectiv.model.Doctors;
 import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
 import org.springframework.data.mongodb.core.query.Query;
+import proiectcolectiv.model.Reviews;
 
 
 import java.util.List;
@@ -113,5 +114,22 @@ public class HospitalsService {
             return true;
         }
         return true;
+    }
+
+    public Hospitals addReviewToHospital(String hospitalName, String review_text, float rating){
+        Hospitals hospitals = findByName(hospitalName);
+
+        int lastID;
+        List<Reviews> list = hospitals.getReviews();
+        int size = list.size();
+        if (size == 0) {
+            lastID = 0;
+        } else {
+            lastID = list.stream().toList().get(size - 1).getId();
+        }
+
+        Reviews reviews = new Reviews(lastID + 1, review_text, rating);
+        hospitals.addReview(reviews);
+        return mt.save(hospitals);
     }
 }

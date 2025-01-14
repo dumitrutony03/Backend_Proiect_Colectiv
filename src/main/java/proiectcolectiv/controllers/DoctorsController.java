@@ -106,8 +106,8 @@ public class DoctorsController {
      */
     @PostMapping(value = "/review/add")
     public DoctorsDto addReview(@RequestBody AddReviewDto addReviewDto) {
-        if (service.checkDoctorExists(addReviewDto.getUsername())) {
-            Doctors model = service.addReviewToDoctor(addReviewDto.getUsername(), addReviewDto.getReview_text(), addReviewDto.getRating());
+        if (service.checkDoctorExists(addReviewDto.getName())) {
+            Doctors model = service.addReviewToDoctor(addReviewDto.getName(), addReviewDto.getReview_text(), addReviewDto.getRating());
             return mapper.toDto(model);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
