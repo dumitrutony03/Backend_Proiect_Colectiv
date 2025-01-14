@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import proiectcolectiv.model.Doctors;
+import proiectcolectiv.model.Reviews;
 
 import java.util.List;
 
@@ -64,4 +65,22 @@ public class DoctorsService {
         }
         return true;
     }
+
+    public Doctors addReviewToDoctor(String doctorsName, String review_text, float rating){
+        Doctors doctor = findByUserName(doctorsName);
+
+        int lastID;
+        List<Reviews> list = doctor.getReviews();
+        int size = list.size();
+        if (size == 0) {
+            lastID = 0;
+        } else {
+            lastID = list.stream().toList().get(size - 1).getId();
+        }
+
+        Reviews reviews = new Reviews(lastID + 1, review_text, rating);
+        doctor.addReview(reviews);
+        return mt.save(doctor);
+    }
+
 }

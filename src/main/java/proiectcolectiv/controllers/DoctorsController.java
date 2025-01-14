@@ -6,11 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.AddHospitalDto;
+import proiectcolectiv.dto.AddReviewDto;
 import proiectcolectiv.dto.DoctorsDto;
 import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.mapper.MyMapper;
 import proiectcolectiv.mapper.UserMapper;
 import proiectcolectiv.model.Doctors;
+import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.DoctorsService;
 
 import java.util.List;
@@ -40,7 +42,7 @@ public class DoctorsController {
             doctor.setId(service.getLastId() + 1);
             Doctors savedModel = service.save(doctor);
 
-            System.out.println("Dosctor saved: " + savedModel);
+            System.out.println("Doctor saved: " + savedModel);
             return userMapper.toDto(savedModel);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
@@ -90,6 +92,22 @@ public class DoctorsController {
         // Pacientii si review urile le facem cu update.
         if (service.checkDoctorExists(addHospitalDto.getDoctorUsername())) {
             Doctors model = service.removeHospitalNameToDoctor(addHospitalDto.getDoctorUsername(), addHospitalDto.getHospitalName());
+            return mapper.toDto(model);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
+    }
+
+    /**
+     * Add review to a doctor
+     *
+     * @param addReviewDto
+     * @return DoctorsDto
+     */
+    @PostMapping(value = "/review/add")
+    public DoctorsDto addReview(@RequestBody AddReviewDto addReviewDto) {
+        if (service.checkDoctorExists(addReviewDto.getUsername())) {
+            Doctors model = service.addReviewToDoctor(addReviewDto.getUsername(), addReviewDto.getReview_text(), addReviewDto.getRating());
             return mapper.toDto(model);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");

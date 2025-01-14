@@ -31,4 +31,11 @@ public class Doctors extends UserData {
         this.hospitals.remove(hospitalName);
     }
 
+    public void addReview(Reviews review) {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
+        this.reviews.add(review);
+    }
+
 }
