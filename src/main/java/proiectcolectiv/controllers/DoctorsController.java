@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/doctor")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DoctorsController {
-
     @Autowired
     private DoctorsService service;
     @Autowired
@@ -39,6 +39,8 @@ public class DoctorsController {
             Doctors doctor = userMapper.toModelDoctors(doctorsDto);
             doctor.setId(service.getLastId() + 1);
             Doctors savedModel = service.save(doctor);
+
+            System.out.println("Dosctor saved: " + savedModel);
             return userMapper.toDto(savedModel);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pacient")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PacientController {
 
     @Autowired
@@ -34,6 +35,7 @@ public class PacientController {
      */
     @PostMapping(value = "/")
     public PacientDto addPacient(@RequestBody UserDataDto pacientDto) {
+        System.out.println(pacientDto.userName + " " + pacientDto.password);
         if (!service.checkPacientExists(pacientDto)) {
             Pacient pacient = userMapper.toModelPacient(pacientDto);
             pacient.setId(service.getLasId() + 1);
