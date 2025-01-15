@@ -88,5 +88,11 @@
     "adress": "Strada Croitorilor, nr. 19-21",
     "latitude": 46.7638293,
     "longitude": 23.5793742
+  },
+  {
+    "name": "Institutul Oncologic Prof. Dr. Ion Chiricuță",
+    "adress": "Str. Republicii 34-36",
+    "latitude":46.7638069,
+    "longitude": 23.5832739
   }
 ]

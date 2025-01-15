@@ -6,7 +6,7 @@
       "userName": "DrPopescu",
       "password": "securePass1",
       "hospitals": [
-        "Institutul Inimii \"Niculae Stancioiu\"",
+        "Institutul Inimii Niculae Stancioiu",
         "Spitalul Clinic Județean de Urgență Cluj-Napoca"
       ]
     },
@@ -26,7 +26,7 @@
       "userName": "DrVasilescu",
       "password": "oncopass3",
       "hospitals": [
-        "Institutul Oncologic \"Prof. Dr. Ion Chiricuță\""
+        "Institutul Oncologic Prof. Dr. Ion Chiricuță"
       ]
     },
     {
@@ -46,7 +46,7 @@
       "password": "chirurgpass5",
       "hospitals": [
         "Spitalul Clinic de Chirurgie",
-        "Spitalul Militar de Urgență \"Dr. Constantin Papilian\""
+        "Spitalul Militar de Urgență Dr. Constantin Papilian"
       ]
     },
     {
@@ -73,7 +73,7 @@
       "userName": "DrAndrei",
       "password": "hormonpass8",
       "hospitals": [
-        "Institutul Regional de Gastroenterologie și Hepatologie \"Prof. Dr. Octavian Fodor\""
+        "Institutul Regional de Gastroenterologie și Hepatologie Prof. Dr. Octavian Fodor"
       ]
     },
     {
