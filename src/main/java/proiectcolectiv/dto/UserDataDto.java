@@ -5,5 +5,4 @@ import java.io.Serializable;
 public class UserDataDto implements Serializable {
     public String userName;
     public String password;
-
 }
