@@ -1,13 +1,18 @@
 package proiectcolectiv.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import proiectcolectiv.model.Doctors;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DoctorsService {
@@ -63,5 +68,56 @@ public class DoctorsService {
             return true;
         }
         return true;
+    }
+
+    /**
+     * hardcodeaza doctori in baza de date din json
+     *
+     */
+    public void hardcodeDoctors() {
+        if (!findAll().isEmpty()) {
+            System.out.println("baza de date nu e goala");
+            return;
+        }
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            DoctorsWrapper wrapper = objectMapper.readValue(
+                    new ClassPathResource("doctori.json").getInputStream(),
+                    DoctorsWrapper.class
+            );
+
+            List<Doctors> doctorsList = wrapper.getDoctors();
+
+            Set<Integer> uniqueIds = new HashSet<>();
+            Set<String> uniqueUsernames = new HashSet<>();
+
+            for (Doctors doctor : doctorsList) {
+                // daca id sau userName exista opreste procesul
+                if (!uniqueIds.add(doctor.getId()) || !uniqueUsernames.add(doctor.getUserName())) {
+                    System.out.println("eroare: doctorul cu ID " + doctor.getId() + " sau userName " + doctor.getUserName() + " este duplicat");
+                    return;
+                }
+            }
+
+            doctorsList.forEach(this::save);
+            System.out.println("doctori salvati in db");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("eroare la citire fisier");
+        }
+    }
+
+    public static class DoctorsWrapper {
+        private List<Doctors> doctors;
+
+        public List<Doctors> getDoctors() {
+            return doctors;
+        }
+
+        public void setDoctors(List<Doctors> doctors) {
+            this.doctors = doctors;
+        }
     }
 }

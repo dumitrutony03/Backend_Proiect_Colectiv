@@ -28,6 +28,17 @@ public class DoctorsController {
     private UserMapper userMapper;
 
     /**
+     * endpoint pentru a initializa doctorii
+     *
+     * @return  mesaj confirmare
+     */
+    @GetMapping(value = "/hardcode")
+    public String hardcodeDoctors() {
+        service.hardcodeDoctors();
+        return "hardcoded";
+    }
+
+    /**
      * Register doctor
      *
      * @param doctorsDto
