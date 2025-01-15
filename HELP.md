@@ -92,6 +92,8 @@ POST http://localhost:8080/user/login?role=PACIENT
    "adress": "adresa noua din update"
 }
 
+5. PUT http://localhost:8080/hospitals/hardcode
+
 ---------------------------*REVIEW*----------------------------------------
 1. GET http://localhost:8080/review/all
 2. POST http://localhost:8080/review/
