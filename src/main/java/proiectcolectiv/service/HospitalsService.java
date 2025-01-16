@@ -11,8 +11,10 @@ import proiectcolectiv.model.Doctors;
 import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
 import org.springframework.data.mongodb.core.query.Query;
+import proiectcolectiv.model.Reviews;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,8 +29,9 @@ public class HospitalsService {
     }
 
     public Hospitals findByName(String name) {
+        String newName = name.replace("-", " ");
         Query query = new Query();
-        query.addCriteria(Criteria.where("name").is(name));
+        query.addCriteria(Criteria.where("name").is(newName));
         return mt.findOne(query, Hospitals.class);
     }
 
@@ -102,7 +105,7 @@ public class HospitalsService {
     }
 
     public boolean checkHospitalExists(String name) {
-        Hospitals hospital = findByName( name);
+        Hospitals hospital = findByName(name);
         if ( hospital== null) {
             return false;
         }
@@ -113,5 +116,32 @@ public class HospitalsService {
             return true;
         }
         return true;
+    }
+
+    public Hospitals addReviewToHospital(String hospitalName, String review_text, float rating){
+        Hospitals hospitals = findByName(hospitalName);
+
+        if(hospitals.getReviews() == null){
+            hospitals.setReviews(List.of());
+        }
+
+        int lastID;
+        List<Reviews> list = hospitals.getReviews();
+
+        int size = 0;
+        if (list != null) {
+            size = list.size();
+        }
+        else hospitals.setReviews(new ArrayList<>());
+
+        if (size == 0) {
+            lastID = 0;
+        } else {
+            lastID = list.stream().toList().get(size - 1).getId();
+        }
+
+        Reviews reviews = new Reviews(lastID + 1, review_text, rating);
+        hospitals.addReview(reviews);
+        return mt.save(hospitals);
     }
 }

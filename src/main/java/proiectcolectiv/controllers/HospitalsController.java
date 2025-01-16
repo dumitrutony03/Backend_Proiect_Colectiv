@@ -1,8 +1,6 @@
 package proiectcolectiv.controllers;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -37,7 +35,7 @@ public class HospitalsController {
     @PostMapping(value = "/")
     public HospitalsDto addHospital(@RequestBody HospitalsDto hospitalDTO) {
         // Replace hyphens with spaces in the hospital name
-        hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
+       hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
         if (!service.checkHospitalExists(hospitalDTO.getName())) {
             Hospitals model = mapper.toModel(hospitalDTO);
             model.setId(service.getLastId() + 1);
@@ -104,6 +102,18 @@ public class HospitalsController {
 
         service.delete(hospital);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(value = "/review/add/{name}")
+    public ResponseEntity<HospitalsDto> addReview(@PathVariable String name, @RequestBody ReviewsDto reviewsDto){
+        //folosesti requestparam/ pathparam si requestbody
+        if (service.checkHospitalExists(name)) {
+
+            Hospitals model = service.addReviewToHospital(name, reviewsDto.getReview_text(), reviewsDto.getRating());
+            return new ResponseEntity<>(mapper.toDto(model), HttpStatus.OK);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
     }
 
     @PostMapping(value = "/hardcode")
