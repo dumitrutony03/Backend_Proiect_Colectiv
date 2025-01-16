@@ -194,7 +194,12 @@ public class DoctorsService {
         }
     }
 
-
+    /**
+     * Gets all doctors from a hospital.
+     *
+     * @param hospitalName the name of the hospital
+     * @return a list of doctors from the hospital
+     */
     public List<Doctors> getDoctorsFromHospital(String hospitalName) {
         String newName = hospitalName.replace("-", " ");
         Query query = new Query();
