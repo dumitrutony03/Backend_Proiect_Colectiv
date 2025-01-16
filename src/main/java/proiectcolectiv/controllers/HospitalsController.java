@@ -1,6 +1,10 @@
 package proiectcolectiv.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.HospitalsDto;
 import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
+import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.HospitalsService;
 import proiectcolectiv.model.Hospitals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -81,6 +88,7 @@ public class HospitalsController {
         Hospitals updatedHospital = service.save(existingHospital);
         return new ResponseEntity<>(mapper.toDto(updatedHospital), HttpStatus.OK);
     }
+
     @DeleteMapping(value = "/delete/{name}")
     public ResponseEntity<Void> deleteHospital(@PathVariable String name) {
         // Replace hyphens with spaces in the hospital name
@@ -104,6 +112,46 @@ public class HospitalsController {
             return new ResponseEntity<>(mapper.toDto(model), HttpStatus.OK);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
+    }
+
+    @PostMapping(value = "/hardcode")
+    public ResponseEntity<String> populateDB() {
+        try {
+            // Read the JSON file before deleting
+            File file = new File("spitale.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Convert the JSON file to a list of DTOs
+            List<HospitalsDto> hospitalsList = objectMapper.readValue(file, new TypeReference<List<HospitalsDto>>() {
+            });
+
+            // Convert each DTO to a Hospital model
+            List<Hospitals> hospitalsFromFile = hospitalsList.stream()
+                    .map(mapper::toModel)
+                    .toList();
+
+            // Ensure all hospitals are deleted before adding new data
+            System.out.println("Deleting all existing hospitals...");
+
+            List<Hospitals> allHopitals = service.findAll();
+            for (Hospitals hospital : allHopitals) {
+                service.deleteByName(hospital.name); //.deleteByName deletes through query, better for loops than .delete
+            }
+
+            // Assign new IDs and save hospitals
+            int lastId = 1;
+            for (Hospitals hospital : hospitalsFromFile) {
+                if (!service.checkHospitalExists(hospital.getName())) {
+                    hospital.setId(lastId);
+                    service.save(hospital);
+                    lastId++;
+                }
+            }
+            return new ResponseEntity<>("Database populated with data.", HttpStatus.OK);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading or processing the JSON file.", e);
         }
     }
 }

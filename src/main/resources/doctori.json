@@ -1,0 +1,90 @@
+{
+  "doctors": [
+    {
+      "id": 1,
+      "speciality": "Cardiolog",
+      "userName": "DrPopescu",
+      "password": "securePass1",
+      "hospitals": [
+        "Institutul Inimii Niculae Stancioiu",
+        "Spitalul Clinic Județean de Urgență Cluj-Napoca"
+      ]
+    },
+    {
+      "id": 2,
+      "speciality": "Neurolog",
+      "userName": "DrIonescu",
+      "password": "neuropass2",
+      "hospitals": [
+        "Spitalul Clinic de Neurologie",
+        "Spitalul Clinic de Psihiatrie"
+      ]
+    },
+    {
+      "id": 3,
+      "speciality": "Oncolog",
+      "userName": "DrVasilescu",
+      "password": "oncopass3",
+      "hospitals": [
+        "Institutul Oncologic Prof. Dr. Ion Chiricuță"
+      ]
+    },
+    {
+      "id": 4,
+      "speciality": "Pediatru",
+      "userName": "Ana",
+      "password": "Cressida",
+      "hospitals": [
+        "Spitalul Clinic de Chirurgie",
+        "Spitalul Clinic de Psihiatrie"
+      ]
+    },
+    {
+      "id": 5,
+      "speciality": "Chirurg",
+      "userName": "DrRadulescu",
+      "password": "chirurgpass5",
+      "hospitals": [
+        "Spitalul Clinic de Chirurgie",
+        "Spitalul Militar de Urgență Dr. Constantin Papilian"
+      ]
+    },
+    {
+      "id": 6,
+      "speciality": "Dermatolog",
+      "userName": "DrMatei",
+      "password": "dermapass6",
+      "hospitals": [
+        "Spitalul Clinic Județean de Urgență Cluj-Napoca"
+      ]
+    },
+    {
+      "id": 7,
+      "speciality": "Oftalmolog",
+      "userName": "DrLazar",
+      "password": "opticpass7",
+      "hospitals": [
+        "Spitalul Clinic Municipal Cluj-Napoca"
+      ]
+    },
+    {
+      "id": 8,
+      "speciality": "Endocrinolog",
+      "userName": "DrAndrei",
+      "password": "hormonpass8",
+      "hospitals": [
+        "Institutul Regional de Gastroenterologie și Hepatologie Prof. Dr. Octavian Fodor"
+      ]
+    },
+    {
+      "id": 9,
+      "speciality": "Urolog",
+      "userName": "DrEnache",
+      "password": "uropass9",
+      "hospitals": [
+        "Spitalul Clinic de Chirurgie",
+        "Spitalul Clinic de Neurologie"
+      ]
+    }
+  ]
+}

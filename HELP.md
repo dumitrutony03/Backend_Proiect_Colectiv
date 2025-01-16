@@ -94,11 +94,14 @@ POST http://localhost:8080/user/login?role=PACIENT
 3. GET http://localhost:8080/hospitals/Spitalul-Clinic-Județean-de-Urgență-Cluj-Napoca
 
 4. PATCH http://localhost:8080/hospitals/update/Spitalul-Clinic-Județean-de-Urgență-Cluj-Napoca
+
 {
    "adress": "adresa noua din update"
 }
 
-5. PATCH http://localhost:8080/hospitals/review/add/Hospital-Name
+5. PUT http://localhost:8080/hospitals/hardcode
+
+6. PATCH http://localhost:8080/hospitals/review/add/Hospital-Name
    {
    "review_text": "Conditii bune de igiena. Personal amabil.",
    "rating": 5.0

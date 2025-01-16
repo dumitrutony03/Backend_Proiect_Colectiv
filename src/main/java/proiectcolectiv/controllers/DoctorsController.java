@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/doctor")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5174")
 public class DoctorsController {
     @Autowired
     private DoctorsService service;
@@ -27,6 +27,17 @@ public class DoctorsController {
     private MyMapper mapper;
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * endpoint pentru a initializa doctorii
+     *
+     * @return  mesaj confirmare
+     */
+    @GetMapping(value = "/hardcode")
+    public String hardcodeDoctors() {
+        service.hardcodeDoctors();
+        return "hardcoded";
+    }
 
     /**
      * Register doctor
