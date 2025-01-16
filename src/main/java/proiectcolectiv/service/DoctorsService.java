@@ -21,19 +21,47 @@ public class DoctorsService {
     @Autowired
     MongoTemplate mt;
 
+    /**
+     * Saves a Doctor to the database.
+     *
+     * @param doctors the doctor to save
+     * @return the saved doctor
+     */
     public Doctors save(Doctors doctors) {
         return mt.save(doctors);
     }
+
+    /**
+     * Adds a hospital name to the doctor's list of hospitals.
+     *
+     * @param doctorsName the name of the doctor
+     * @param hospitalName the name of the hospital to add
+     * @return the updated doctor
+     */
     public Doctors addHospitalNameToDoctor(String doctorsName, String hospitalName){
         Doctors doctor = findByUserName(doctorsName);
         doctor.addHosptial(hospitalName);
         return mt.save(doctor);
     }
+
+    /**
+     * Removes a hospital name from the doctor's list of hospitals.
+     *
+     * @param doctorsName the name of the doctor
+     * @param hospitalName the name of the hospital to remove
+     * @return the updated doctor
+     */
     public Doctors removeHospitalNameToDoctor(String doctorsName, String hospitalName){
         Doctors doctor = findByUserName(doctorsName);
         doctor.removeHospital(hospitalName);
         return mt.save(doctor);
     }
+
+    /**
+     * Retrieves the last doctor's ID from the database.
+     *
+     * @return the last doctor ID
+     */
     public int getLastId() {
         int lastID;
         List<Doctors> list = findAll();
@@ -48,20 +76,36 @@ public class DoctorsService {
         return lastID;
     }
 
+    /**
+     * Finds a doctor by their username.
+     *
+     * @param userName the username of the doctor
+     * @return the doctor if found, otherwise null
+     */
     public Doctors findByUserName(String userName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userName").is(userName));
         return mt.findOne(query, Doctors.class);
     }
 
+    /**
+     * Retrieves all doctors from the database.
+     *
+     * @return a list of all doctors
+     */
     public List<Doctors> findAll() {
         return mt.findAll(Doctors.class);
     }
 
-    //exists->return true, not exists->return false
+    /**
+     * Checks if a doctor with the given username exists in the database.
+     *
+     * @param userName the username of the doctor
+     * @return true if the doctor exists, otherwise false
+     */
     public boolean checkDoctorExists(String userName) {
-        Doctors doctor = findByUserName( userName);
-        if ( doctor== null) {
+        Doctors doctor = findByUserName(userName);
+        if (doctor == null) {
             return false;
         }
         String name = doctor.getUserName();
@@ -97,8 +141,8 @@ public class DoctorsService {
 
 
     /**
-     * hardcodeaza doctori in baza de date din json
-     *
+     * Hardcodes doctors into the database from a JSON file.
+     * It checks if the database is empty before proceeding.
      */
     public void hardcodeDoctors() {
         if (!findAll().isEmpty()) {
@@ -135,6 +179,9 @@ public class DoctorsService {
         }
     }
 
+    /**
+     * Wrapper class to hold a list of doctors.
+     */
     public static class DoctorsWrapper {
         private List<Doctors> doctors;
 

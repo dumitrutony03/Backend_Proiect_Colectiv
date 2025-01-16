@@ -1,7 +1,6 @@
 package proiectcolectiv.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,10 @@ public class ReviewsController {
     private MyMapper mapper;
 
     /**
-     * Add a new review.
+     * Adds a new review.
+     *
+     * @param reviewsDto the review DTO to be added
+     * @return the added review DTO with CREATED status
      */
     @PostMapping(value = "/")
     public ResponseEntity<ReviewsDto> addReviews(@RequestBody ReviewsDto reviewsDto) {
@@ -38,7 +40,9 @@ public class ReviewsController {
     }
 
     /**
-     * Get all reviews.
+     * Retrieves all reviews.
+     *
+     * @return a list of all review DTOs
      */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ReviewsDto> getAllReviews() {
@@ -47,7 +51,11 @@ public class ReviewsController {
     }
 
     /**
-     * Update a review.
+     * Updates a review by its ID.
+     *
+     * @param id the ID of the review to be updated
+     * @param reviewsDto the review DTO containing updated fields
+     * @return the updated review DTO with OK status or NOT_FOUND if the review doesn't exist
      */
     @PatchMapping(value = "/update/{id}")
     public ResponseEntity<ReviewsDto> updateReviews(@PathVariable int id, @RequestBody ReviewsDto reviewsDto) {
@@ -70,7 +78,10 @@ public class ReviewsController {
     }
 
     /**
-     * Delete a review.
+     * Deletes a review by its ID.
+     *
+     * @param id the ID of the review to be deleted
+     * @return a NO_CONTENT status if successful, otherwise NOT_FOUND
      */
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable int id) {
@@ -83,6 +94,4 @@ public class ReviewsController {
         service.deleteReview(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-//
-
 }

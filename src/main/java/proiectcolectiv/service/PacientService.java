@@ -16,12 +16,22 @@ public class PacientService {
     @Autowired
     MongoTemplate mt;
 
+    /**
+     * Saves a Pacient to the database.
+     *
+     * @param pacient the pacient to save
+     * @return the saved pacient
+     */
     public Pacient save(Pacient pacient) {
         return mt.save(pacient);
     }
 
+    /**
+     * Retrieves the last pacient ID from the database.
+     *
+     * @return the last pacient ID
+     */
     public int getLasId() {
-        // return last ID
         int lastID = 0;
         List<Pacient> list = findAll();
         int size = list.size();
@@ -33,16 +43,33 @@ public class PacientService {
         return lastID;
     }
 
+    /**
+     * Finds a pacient by their username.
+     *
+     * @param userName the username of the pacient
+     * @return the pacient if found, otherwise null
+     */
     public Pacient findByUserName(String userName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userName").is(userName));
         return mt.findOne(query, Pacient.class);
     }
 
+    /**
+     * Retrieves all pacients from the database.
+     *
+     * @return a list of all pacients
+     */
     public List<Pacient> findAll() {
         return mt.findAll(Pacient.class);
     }
 
+    /**
+     * Checks if a pacient exists based on the provided UserDataDto.
+     *
+     * @param model the UserDataDto containing the username
+     * @return true if the pacient exists, otherwise false
+     */
     public boolean checkPacientExists(UserDataDto model) {
         Pacient pacient = findByUserName(model.userName);
         if (pacient == null) {
@@ -50,13 +77,16 @@ public class PacientService {
         }
         String name = pacient.getUserName();
         boolean val = name.isEmpty();
-        if (!val) {
-            return true;
-        }
-        return true;
+        return !val; // return true if name is not empty
     }
 
-
+    /**
+     * Adds a diagnostic to the pacient's record.
+     *
+     * @param userName the username of the pacient
+     * @param diagnostic the diagnostic to add
+     * @return the updated pacient, or null if the pacient is not found
+     */
     public Pacient addDiagnostic(String userName, String diagnostic) {
         Pacient pacient = findByUserName(userName);
         if (pacient == null) {
@@ -65,5 +95,4 @@ public class PacientService {
         pacient.addDiagnostic(diagnostic);
         return save(pacient);
     }
-
 }

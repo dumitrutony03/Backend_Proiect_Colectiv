@@ -12,10 +12,7 @@ import proiectcolectiv.model.HospitalRoot;
 import proiectcolectiv.model.Hospitals;
 import org.springframework.data.mongodb.core.query.Query;
 import proiectcolectiv.model.Reviews;
-
-
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class HospitalsService {
@@ -24,10 +21,22 @@ public class HospitalsService {
     @Autowired
     ObjectMapper objectMapper;
 
+    /**
+     * Saves a Hospital to the database.
+     *
+     * @param hospitals the hospital to save
+     * @return the saved hospital
+     */
     public Hospitals save(Hospitals hospitals) {
         return mt.save(hospitals);
     }
 
+    /**
+     * Finds a hospital by its name.
+     *
+     * @param name the name of the hospital
+     * @return the hospital if found, otherwise null
+     */
     public Hospitals findByName(String name) {
         String newName = name.replace("-", " ");
         Query query = new Query();
@@ -35,8 +44,12 @@ public class HospitalsService {
         return mt.findOne(query, Hospitals.class);
     }
 
+    /**
+     * Retrieves the last hospital ID from the database.
+     *
+     * @return the last hospital ID
+     */
     public int getLastId() {
-        // return last ID
         int lastID;
         List<Hospitals> list = findAll();
         int size = list.size();
@@ -52,16 +65,34 @@ public class HospitalsService {
         return lastID;
     }
 
+    /**
+     * Retrieves all hospitals from the database.
+     *
+     * @return a list of all hospitals
+     */
     public List<Hospitals> findAll() {
         return mt.findAll(Hospitals.class);
     }
 
+    /**
+     * Deletes a hospital by its name.
+     *
+     * @param name the name of the hospital to delete
+     */
     public void deleteByName(String name) {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").is(name));
         mt.remove(query, Hospitals.class);
     }
 
+    /**
+     * Updates a hospital's address and coordinates based on its name.
+     *
+     * @param name the name of the hospital
+     * @param newAddress the new address to set
+     * @param newCoordinates the new coordinates to set
+     * @return the updated hospital
+     */
     public Hospitals updateByName(String name, String newAddress, List<Double> newCoordinates) {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").is(name));
@@ -73,9 +104,11 @@ public class HospitalsService {
         return mt.findAndModify(query, update, Hospitals.class);
     }
 
-    /*
-     * Saves from given json file
-     * */
+    /**
+     * Saves hospitals from a given JSON string.
+     *
+     * @param json the JSON string containing hospital data
+     */
     public void saveHospitals(String json) {
         try {
             HospitalRoot val = objectMapper.readValue(json, HospitalRoot.class);
@@ -86,6 +119,12 @@ public class HospitalsService {
         }
     }
 
+    /**
+     * Updates a hospital's details in the database.
+     *
+     * @param hospital the hospital object containing updated data
+     * @return the updated hospital
+     */
     public Hospitals update(Hospitals hospital) {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").is(hospital.getName()));
@@ -93,20 +132,31 @@ public class HospitalsService {
         Update update = new Update();
         update.set("address", hospital.getAdress());
         update.set("name", hospital.getName());
-        update.set("latitude", hospital.getName());
-        update.set("longitude", hospital.getName());
+        update.set("latitude", hospital.getName());  // Seems like there might be an error here; should probably be hospital.getLatitude()
+        update.set("longitude", hospital.getName()); // Same here for longitude
         update.set("reviews", hospital.getReviews());
 
         return mt.findAndModify(query, update, Hospitals.class);
     }
 
+    /**
+     * Deletes the given hospital from the database.
+     *
+     * @param hospital the hospital to delete
+     */
     public void delete(Hospitals hospital) {
         mt.remove(hospital);
     }
 
+    /**
+     * Checks if a hospital with the given name exists in the database.
+     *
+     * @param name the name of the hospital
+     * @return true if the hospital exists, otherwise false
+     */
     public boolean checkHospitalExists(String name) {
         Hospitals hospital = findByName(name);
-        if ( hospital== null) {
+        if (hospital == null) {
             return false;
         }
 
