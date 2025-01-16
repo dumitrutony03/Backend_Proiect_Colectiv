@@ -55,4 +55,15 @@ public class PacientService {
         }
         return true;
     }
+
+
+    public Pacient addDiagnostic(String userName, String diagnostic) {
+        Pacient pacient = findByUserName(userName);
+        if (pacient == null) {
+            return null;
+        }
+        pacient.addDiagnostic(diagnostic);
+        return save(pacient);
+    }
+
 }
