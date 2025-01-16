@@ -26,6 +26,13 @@ Parametru endDate : OBLIGATORIU, valoarea poate sa lipseasca
 }
 
 2.GET http://localhost:8080/pacient/all
+3. PATCH http://localhost:8080/diagnosis/{username}/{diagnostic}
+   PATCH http://localhost:8080/diagnosis/johndoe/cardiac-issue
+   {
+   "id": 1,
+   "username": "johndoe",
+   "diagnostics": ["cardiac-issue"]
+   }
 
 ---------------------------*DOCTOR*----------------------------------------
 
