@@ -6,13 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.AddHospitalDto;
-import proiectcolectiv.dto.AddReviewDto;
 import proiectcolectiv.dto.DoctorsDto;
+import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.mapper.MyMapper;
 import proiectcolectiv.mapper.UserMapper;
 import proiectcolectiv.model.Doctors;
-import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.DoctorsService;
 
 import java.util.List;
@@ -98,16 +97,10 @@ public class DoctorsController {
         }
     }
 
-    /**
-     * Add review to a doctor
-     *
-     * @param addReviewDto
-     * @return DoctorsDto
-     */
-    @PostMapping(value = "/review/add")
-    public DoctorsDto addReview(@RequestBody AddReviewDto addReviewDto) {
-        if (service.checkDoctorExists(addReviewDto.getName())) {
-            Doctors model = service.addReviewToDoctor(addReviewDto.getName(), addReviewDto.getReview_text(), addReviewDto.getRating());
+    @PatchMapping(value = "/review/add/{name}")
+    public DoctorsDto addReview(@PathVariable String name, @RequestBody ReviewsDto reviewsDto) {
+        if (service.checkDoctorExists(name)) {
+            Doctors model = service.addReviewToDoctor(name, reviewsDto.getReview_text(), reviewsDto.getRating());
             return mapper.toDto(model);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");

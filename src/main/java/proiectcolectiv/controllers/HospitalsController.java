@@ -1,21 +1,14 @@
 package proiectcolectiv.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import proiectcolectiv.dto.AddReviewDto;
-import proiectcolectiv.dto.DoctorsDto;
 import proiectcolectiv.dto.HospitalsDto;
 import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
-import proiectcolectiv.model.Doctors;
-import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.HospitalsService;
 import proiectcolectiv.model.Hospitals;
 
@@ -44,6 +37,7 @@ public class HospitalsController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
         }
     }
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HospitalsDto> getAllHospitals() {
         List<Hospitals> hospitals = service.findAll();
@@ -101,20 +95,15 @@ public class HospitalsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /**
-     * Add review to a hospital
-     *
-     * @param addReviewDto
-     * @return HospitalsDto
-     */
-    @PostMapping(value = "/review/add")
-    public HospitalsDto addReview(@RequestBody AddReviewDto addReviewDto) {
-        if (service.checkHospitalExists(addReviewDto.getName())) {
-            Hospitals model = service.addReviewToHospital(addReviewDto.getName(), addReviewDto.getReview_text(), addReviewDto.getRating());
-            return mapper.toDto(model);
+    @PatchMapping(value = "/review/add/{name}")
+    public ResponseEntity<HospitalsDto> addReview(@PathVariable String name, @RequestBody ReviewsDto reviewsDto){
+        //folosesti requestparam/ pathparam si requestbody
+        if (service.checkHospitalExists(name)) {
+
+            Hospitals model = service.addReviewToHospital(name, reviewsDto.getReview_text(), reviewsDto.getRating());
+            return new ResponseEntity<>(mapper.toDto(model), HttpStatus.OK);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
         }
     }
-
 }

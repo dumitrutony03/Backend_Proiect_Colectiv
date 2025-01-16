@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import proiectcolectiv.model.Doctors;
 import proiectcolectiv.model.Reviews;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,8 +44,9 @@ public class DoctorsService {
     }
 
     public Doctors findByUserName(String userName) {
+        String newName = userName.replace("-", " ");
         Query query = new Query();
-        query.addCriteria(Criteria.where("userName").is(userName));
+        query.addCriteria(Criteria.where("userName").is(newName));
         return mt.findOne(query, Doctors.class);
     }
 
@@ -71,7 +73,13 @@ public class DoctorsService {
 
         int lastID;
         List<Reviews> list = doctor.getReviews();
-        int size = list.size();
+
+        int size = 0;
+        if (list != null) {
+            size = list.size();
+        }
+        else doctor.setReviews(new ArrayList<>());
+
         if (size == 0) {
             lastID = 0;
         } else {
