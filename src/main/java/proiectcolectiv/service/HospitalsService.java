@@ -13,6 +13,7 @@ import proiectcolectiv.model.Hospitals;
 import org.springframework.data.mongodb.core.query.Query;
 import proiectcolectiv.model.Reviews;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HospitalsService {
