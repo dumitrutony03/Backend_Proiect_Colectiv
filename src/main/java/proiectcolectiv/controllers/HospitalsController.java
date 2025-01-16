@@ -1,22 +1,15 @@
 package proiectcolectiv.controllers;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.HospitalsDto;
-import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
-import proiectcolectiv.model.Reviews;
 import proiectcolectiv.service.HospitalsService;
 import proiectcolectiv.model.Hospitals;
 
@@ -34,9 +27,15 @@ public class HospitalsController {
     @Autowired
     private MyMapper mapper;
 
+    /**
+     * This method handles adding a new hospital by replacing hyphens with spaces in the hospital name,
+     * checking if the hospital already exists, and saving it if it does not.
+     *
+     * @param hospitalDTO the hospital DTO to be added
+     * @return the added hospital DTO
+     */
     @PostMapping(value = "/")
     public HospitalsDto addHospital(@RequestBody HospitalsDto hospitalDTO) {
-        // Replace hyphens with spaces in the hospital name
         hospitalDTO.setName(hospitalDTO.getName().replace("-", " "));
         if (!service.checkHospitalExists(hospitalDTO.getName())) {
             Hospitals model = mapper.toModel(hospitalDTO);
@@ -48,15 +47,25 @@ public class HospitalsController {
         }
     }
 
+    /**
+     * Retrieves all hospitals from the database.
+     *
+     * @return a list of hospital DTOs
+     */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HospitalsDto> getAllHospitals() {
         List<Hospitals> hospitals = service.findAll();
         return hospitals.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a hospital by its name.
+     *
+     * @param name the name of the hospital
+     * @return the hospital DTO if found, otherwise a NO_CONTENT status
+     */
     @GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HospitalsDto> getHospitalByName(@PathVariable String name) {
-        // Replace hyphens with spaces in the hospital name
         name = name.replace("-", " ");
         Hospitals hospital = service.findByName(name);
         if (Objects.isNull(hospital)) {
@@ -65,9 +74,15 @@ public class HospitalsController {
         return new ResponseEntity<>(mapper.toDto(hospital), HttpStatus.OK);
     }
 
+    /**
+     * Partially updates the details of an existing hospital.
+     *
+     * @param name the name of the hospital to be updated
+     * @param hospitalsDto the hospital DTO containing updated fields
+     * @return the updated hospital DTO
+     */
     @PatchMapping(value = "/update/{name}")
     public ResponseEntity<HospitalsDto> partialUpdateHospital(@PathVariable String name, @RequestBody HospitalsDto hospitalsDto) {
-        // Replace hyphens with spaces in the hospital name
         name = name.replace("-", " ");
         Hospitals existingHospital = service.findByName(name);
 
@@ -92,9 +107,14 @@ public class HospitalsController {
         return new ResponseEntity<>(mapper.toDto(updatedHospital), HttpStatus.OK);
     }
 
+    /**
+     * Deletes a hospital by its name.
+     *
+     * @param name the name of the hospital to be deleted
+     * @return a NO_CONTENT status if successful, otherwise NOT_FOUND
+     */
     @DeleteMapping(value = "/delete/{name}")
     public ResponseEntity<Void> deleteHospital(@PathVariable String name) {
-        // Replace hyphens with spaces in the hospital name
         name = name.replace("-", " ");
         Hospitals hospital = service.findByName(name);
 
@@ -106,31 +126,31 @@ public class HospitalsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Populates the database with hospital data from a JSON file. Deletes all existing hospitals.
+     *
+     * @return a response indicating the success or failure of the operation
+     */
     @PostMapping(value = "/hardcode")
     public ResponseEntity<String> populateDB() {
         try {
-            // Read the JSON file before deleting
             File file = new File("spitale.json");
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Convert the JSON file to a list of DTOs
             List<HospitalsDto> hospitalsList = objectMapper.readValue(file, new TypeReference<List<HospitalsDto>>() {
             });
 
-            // Convert each DTO to a Hospital model
             List<Hospitals> hospitalsFromFile = hospitalsList.stream()
                     .map(mapper::toModel)
                     .toList();
 
-            // Ensure all hospitals are deleted before adding new data
             System.out.println("Deleting all existing hospitals...");
 
             List<Hospitals> allHopitals = service.findAll();
             for (Hospitals hospital : allHopitals) {
-                service.deleteByName(hospital.name); //.deleteByName deletes through query, better for loops than .delete
+                service.deleteByName(hospital.name);
             }
 
-            // Assign new IDs and save hospitals
             int lastId = 1;
             for (Hospitals hospital : hospitalsFromFile) {
                 if (!service.checkHospitalExists(hospital.getName())) {

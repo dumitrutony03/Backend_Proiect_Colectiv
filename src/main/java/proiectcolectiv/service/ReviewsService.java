@@ -18,31 +18,51 @@ public class ReviewsService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    // CREATE
+    /**
+     * Saves a review to the database.
+     *
+     * @param review the review to save
+     * @return the saved review
+     */
     public Reviews saveReview(Reviews review) {
         return mongoTemplate.save(review);
     }
 
-    // READ (all)
+    /**
+     * Retrieves all reviews from the database.
+     *
+     * @return a list of all reviews
+     */
     public List<Reviews> findAll() {
         return mongoTemplate.findAll(Reviews.class);
     }
 
-
-    // READ (by ID)
+    /**
+     * Finds a review by its ID.
+     *
+     * @param id the ID of the review
+     * @return an Optional containing the review if found, or an empty Optional if not
+     */
     public Optional<Reviews> findReviewById(int id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
         Reviews review = mongoTemplate.findOne(query, Reviews.class);
         return Optional.ofNullable(review);
     }
-//
-    // UPDATE
+
+    /**
+     * Updates an existing review based on its ID.
+     *
+     * @param id the ID of the review to update
+     * @param reviewDetails the new details for the review
+     * @return the updated review
+     * @throws RuntimeException if the review with the specified ID does not exist
+     */
     public Reviews updateReview(int id, Reviews reviewDetails) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
 
-        // Găsirea review-ului existent
+        // Find the existing review
         Reviews existingReview = mongoTemplate.findOne(query, Reviews.class);
         if (existingReview != null) {
             Update update = new Update();
@@ -50,7 +70,7 @@ public class ReviewsService {
             update.set("rating", reviewDetails.getRating());
             mongoTemplate.updateFirst(query, update, Reviews.class);
 
-            // Returnează obiectul actualizat
+            // Update and return the review
             existingReview.setReview_text(reviewDetails.getReview_text());
             existingReview.setRating(reviewDetails.getRating());
             return existingReview;
@@ -59,20 +79,34 @@ public class ReviewsService {
         }
     }
 
-    // DELETE
+    /**
+     * Deletes a review by its ID.
+     *
+     * @param id the ID of the review to delete
+     */
     public void deleteReview(int id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
         mongoTemplate.remove(query, Reviews.class);
     }
 
-    // Verifică dacă un review există după ID
+    /**
+     * Checks if a review exists by its ID.
+     *
+     * @param id the ID of the review to check
+     * @return true if the review exists, otherwise false
+     */
     public boolean checkReviewExists(int id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
         return mongoTemplate.exists(query, Reviews.class);
     }
 
+    /**
+     * Retrieves the last review ID from the database.
+     *
+     * @return the last review ID
+     */
     public int getLastId() {
         int lastID;
         List<Reviews> list = findAll();
