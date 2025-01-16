@@ -56,4 +56,23 @@ public class PacientController {
         List<Pacient> users = service.findAll();
         return users.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
     }
+
+    /**
+     * add diagnosis to a pacient found by username
+     * @param username
+     * @param diagnosis
+     * @return updated Pacient with a new diagnosis in list
+     */
+    @PatchMapping(value = "/diagnosis/{username}/{diagnosis}")
+    public PacientDto addDiagnostic(@PathVariable String username, @PathVariable String diagnosis) {
+        Pacient updatedPacient = service.addDiagnostic(username, diagnosis);
+
+        if (updatedPacient == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found");
+        }
+
+        return mapper.toDto(updatedPacient);
+    }
+
+
 }
