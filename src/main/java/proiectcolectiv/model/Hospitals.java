@@ -35,4 +35,11 @@ public class Hospitals implements Serializable {
                 '}';
     }
 
+    public void addReview(Reviews review) {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
+        this.reviews.add(review);
+    }
+
 }

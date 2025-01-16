@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.AddHospitalDto;
 import proiectcolectiv.dto.DoctorsDto;
+import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.dto.UserDataDto;
 import proiectcolectiv.mapper.MyMapper;
 import proiectcolectiv.mapper.UserMapper;
@@ -51,7 +52,7 @@ public class DoctorsController {
             doctor.setId(service.getLastId() + 1);
             Doctors savedModel = service.save(doctor);
 
-            System.out.println("Dosctor saved: " + savedModel);
+            System.out.println("Doctor saved: " + savedModel);
             return userMapper.toDto(savedModel);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists");
@@ -101,6 +102,16 @@ public class DoctorsController {
         // Pacientii si review urile le facem cu update.
         if (service.checkDoctorExists(addHospitalDto.getDoctorUsername())) {
             Doctors model = service.removeHospitalNameToDoctor(addHospitalDto.getDoctorUsername(), addHospitalDto.getHospitalName());
+            return mapper.toDto(model);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
+    }
+
+    @PatchMapping(value = "/review/add/{name}")
+    public DoctorsDto addReview(@PathVariable String name, @RequestBody ReviewsDto reviewsDto) {
+        if (service.checkDoctorExists(name)) {
+            Doctors model = service.addReviewToDoctor(name, reviewsDto.getReview_text(), reviewsDto.getRating());
             return mapper.toDto(model);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");

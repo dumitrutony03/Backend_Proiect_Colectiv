@@ -126,11 +126,25 @@ public class HospitalsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     /**
      * Populates the database with hospital data from a JSON file. Deletes all existing hospitals.
      *
      * @return a response indicating the success or failure of the operation
      */
+
+    @PatchMapping(value = "/review/add/{name}")
+    public ResponseEntity<HospitalsDto> addReview(@PathVariable String name, @RequestBody ReviewsDto reviewsDto){
+        //folosesti requestparam/ pathparam si requestbody
+        if (service.checkHospitalExists(name)) {
+
+            Hospitals model = service.addReviewToHospital(name, reviewsDto.getReview_text(), reviewsDto.getRating());
+            return new ResponseEntity<>(mapper.toDto(model), HttpStatus.OK);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not exists");
+        }
+    }
+
     @PostMapping(value = "/hardcode")
     public ResponseEntity<String> populateDB() {
         try {
