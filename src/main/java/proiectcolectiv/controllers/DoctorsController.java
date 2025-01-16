@@ -118,4 +118,10 @@ public class DoctorsController {
         }
     }
 
+    @GetMapping(value = "/fromHospital/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<DoctorsDto> getDoctorsFromHospital(@PathVariable String name) {
+        List<Doctors> doctors = service.getDoctorsFromHospital(name);
+        return doctors.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
+    }
+
 }

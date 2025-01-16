@@ -193,4 +193,12 @@ public class DoctorsService {
             this.doctors = doctors;
         }
     }
+
+
+    public List<Doctors> getDoctorsFromHospital(String hospitalName) {
+        String newName = hospitalName.replace("-", " ");
+        Query query = new Query();
+        query.addCriteria(Criteria.where("hospitals").is(newName));
+        return mt.find(query, Doctors.class);
+    }
 }

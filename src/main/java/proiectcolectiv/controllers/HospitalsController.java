@@ -9,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.HospitalsDto;
+import proiectcolectiv.dto.ReviewsDto;
 import proiectcolectiv.mapper.MyMapper;
-import proiectcolectiv.service.HospitalsService;
 import proiectcolectiv.model.Hospitals;
+import proiectcolectiv.service.HospitalsService;
 
 import java.io.File;
 import java.io.IOException;
