@@ -3,6 +3,7 @@ package proiectcolectiv.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import proiectcolectiv.dto.AddHospitalDto;
@@ -15,6 +16,7 @@ import proiectcolectiv.model.Doctors;
 import proiectcolectiv.service.DoctorsService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -130,5 +132,12 @@ public class DoctorsController {
         List<Doctors> doctors = service.getDoctorsFromHospital(name);
         return doctors.stream().map(elem -> mapper.toDto(elem)).collect(Collectors.toList());
     }
-
+    @GetMapping(value = "/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DoctorsDto> getDoctors(@PathVariable String userName) {
+        Doctors doctor = service.findByUserName(userName);
+        if (Objects.isNull(doctor)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(mapper.toDto(doctor), HttpStatus.OK);
+     }
 }

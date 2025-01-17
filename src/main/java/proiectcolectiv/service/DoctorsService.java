@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import proiectcolectiv.model.Doctors;
+import proiectcolectiv.model.Hospitals;
 import proiectcolectiv.model.Reviews;
 
 import java.util.ArrayList;
@@ -177,6 +178,13 @@ public class DoctorsService {
             e.printStackTrace();
             System.out.println("eroare la citire fisier");
         }
+    }
+
+    public Doctors findByName(String userName) {
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userName").is(userName));
+        return mt.findOne(query, Doctors.class);
     }
 
     /**
