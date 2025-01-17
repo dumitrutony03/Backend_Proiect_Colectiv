@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hospitals")
+@CrossOrigin(origins = "http://localhost:5173")
 public class HospitalsController {
     @Autowired
     private HospitalsService service;

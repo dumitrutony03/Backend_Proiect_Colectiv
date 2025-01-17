@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/appointment")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentsController {
 //    "Am fost aicis"
 
