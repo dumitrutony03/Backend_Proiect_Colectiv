@@ -64,7 +64,7 @@ Parametru endDate : OBLIGATORIU, valoarea poate sa lipseasca
 
 6.GET http://localhost:8080/doctor/hospital/Hospital-Name
 
-
+7.GET  http://localhost:8080/doctor/{userName}
 ---------------------------------*LOGIN*---------------------------------
 
 POST http://localhost:8080/user/login?role=DOCTOR
