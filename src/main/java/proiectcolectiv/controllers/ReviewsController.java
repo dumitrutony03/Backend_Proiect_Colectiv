@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/review")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReviewsController {
 
     @Autowired
