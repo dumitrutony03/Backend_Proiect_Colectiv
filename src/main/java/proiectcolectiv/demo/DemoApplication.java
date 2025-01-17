@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import proiectcolectiv.service.HospitalsService;
 
-@ComponentScan(basePackages = {"proiectcolectiv.mapper", "proiectcolectiv.controllers", "proiectcolectiv.service"})
+@ComponentScan(basePackages = {"proiectcolectiv.mapper", "proiectcolectiv.controllers", "proiectcolectiv.service", "proiectcolectiv.config"})
 @SpringBootApplication(scanBasePackages = "proiectcolectiv.mapper")
 @EnableMongoRepositories
 public class DemoApplication implements CommandLineRunner {
